@@ -1,7 +1,10 @@
 import { useState } from 'react'
 import './App.css'
 import axios from 'axios'
+import {APIProvider,  Map, Marker } from '@vis.gl/react-google-maps';
+
 function App() {
+  const position = {lat: 6.447809299999999, lng: 3.4723495};
   function beginPayment(){
     console.log("beginning Payment")
     let transactionId = '2202733036705334415609310123365701146262'
@@ -28,8 +31,8 @@ function App() {
       newPayment.showPaymentWidget();
     })
     .catch((error) => {
-      console.error("There was an error retrieving payment data", error);
-    });
+      console.error("There was an error retrieving payment data", error)
+    })
   }
   const createTransaction = () => {
     console.log('create transactions')
@@ -69,13 +72,22 @@ function App() {
        console.error("There was an error retrieving payment data", error);
      });
   }
+  // so i've just confirmed, the authentication works.
+  
   return (
     <>
+    <APIProvider apiKey={'67868'} onLoad={()=>{console.log('provider has loaded')}}>
+      <div style={{margin: 20,padding: 20,border: '1px solid', borderRadius: 20,height: 300}}>
+      <Map defaultCenter={position} defaultZoom={10}>
+        <Marker position={position} />
+      </Map>
+      </div>
       <button onClick={createTransaction}>create Transaction</button>
       <div style={{paddingTop: 20}}></div>
       <button onClick={beginPayment}>initialize payment</button>
       <div style={{paddingTop: 20}}></div>
       <button onClick={confirmPayment}>confirm payment</button>
+    </APIProvider>
     </>
   )
 }
